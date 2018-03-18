@@ -11,7 +11,7 @@
 			<input type=text id="notification_time" placeholder="Notification Time (seconds)" v-model="notification_time"></br>
 			<button id="notification_add_button" @click="addNotification">Add a notification</button>
 			<ul id="notification_list" v-for="notification in notifications">
-				{{notification.name}} - {{notification.time}}
+				{{notification.name}}: {{notification.current_time}}
 			</ul>
 		</div>
 		{% endraw %}
