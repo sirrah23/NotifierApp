@@ -59,50 +59,52 @@ const app = new Vue({
 	}
 });
 
-//TODO: Use an IIFE instead and inject Notification object there
-function Notifier(Notification){
-	//TODO: Is it even worth injecting this on?
-	this.notification = Notification
-	this.permission = this.notification.permission;
-}
+const Notifier = (function(Notification){
 
-Notifier.prototype.requestDesktopNotificationPermission = function(){
-	 if(this.notification && this.permission === "default") {
-		this.notification.requestPermission(function (permission) {
-			if(!("permission" in this.notification)) {
-				this.notification.permission = permission;
-				this.permission = permission;
-			}
-		});
-	}
-}
-
-Notifier.prototype.allowedToSendNotifications = function(){
-	return this.permission === "granted"
-}
-
-Notifier.prototype.notify = function(title, text){
-    if (this.allowedToSendNotifications){
-		this.sendDesktopNotification(title, text);
+    function Notifier(){
+        this.permission = Notification.permission;
     }
-}
 
-Notifier.prototype.sendDesktopNotification = function(title, text) {
-	//Send the notification
-    let notification = new this.notification(title , {body: text});
+    Notifier.prototype.requestDesktopNotificationPermission = function(){
+         if(Notification && this.permission === "default") {
+            Notification.requestPermission(function(permission) {
+                if(!("permission" in Notification)) {
+                    Notification.permission = permission;
+                    this.permission = permission;  //TODO: Might not need this...duplicated information
+                }
+            });
+        }
+    }
 
-    //Set up some events to close it
-	notification.onclick = function(){
-		parent.focus();
-		window.focus(); //just in case, older browsers
-		this.close();
-    };
+    Notifier.prototype.allowedToSendNotifications = function(){
+        return this.permission === "granted"
+    }
 
-    //Close automatically after specified length
-    setTimeout(notification.close.bind(notification), 5000);
-}
+    Notifier.prototype.notify = function(title, text){
+        if (this.allowedToSendNotifications){
+            this.sendDesktopNotification(title, text);
+        }
+    }
 
-const notifier = new Notifier(Notification);
+    Notifier.prototype.sendDesktopNotification = function(title, text) {
+        //Send the notification
+        let notification = new Notification(title , {body: text});
+
+        //Set up some events to close it
+        notification.onclick = function(){
+            parent.focus();
+            window.focus(); //just in case, older browsers
+            this.close();
+        };
+
+        //Close automatically after specified length
+        setTimeout(notification.close.bind(notification), 5000);
+    }
+
+    return Notifier
+})(Notification);
+
+const notifier = new Notifier();
 notifier.requestDesktopNotificationPermission();
 
 setInterval(() => {
