@@ -61,23 +61,20 @@ const app = new Vue({
 
 const Notifier = (function(Notification){
 
-    function Notifier(){
-        this.permission = Notification.permission;
-    }
+    function Notifier(){}
 
     Notifier.prototype.requestDesktopNotificationPermission = function(){
-         if(Notification && this.permission === "default") {
+         if(Notification && Notification.permission === "default") {
             Notification.requestPermission(function(permission) {
                 if(!("permission" in Notification)) {
                     Notification.permission = permission;
-                    this.permission = permission;  //TODO: Might not need this...duplicated information
                 }
             });
         }
     }
 
     Notifier.prototype.allowedToSendNotifications = function(){
-        return this.permission === "granted"
+        return Notification.permission === "granted"
     }
 
     Notifier.prototype.notify = function(title, text){
