@@ -10,8 +10,26 @@
 			<input type=text id="notification_name_box" placeholder="Notification Name" v-model="notification_name"></br>
 			<input type=text id="notification_time" placeholder="Notification Time (seconds)" v-model="notification_time"></br>
 			<button id="notification_add_button" @click="addNotification">Add a notification</button>
-			<ul id="notification_list" v-for="notification in notifications">
-				{{notification.name}}: {{notification.current_time}}
+			<ul id="notification_list" style="list-style: none;">
+                <li class="notification_list_item" v-for="notification in notifications">
+                    <button 
+                       class="notification_list_item_start_button" 
+                        v-if="notification.isStopped()"
+                        @click="notification.toggleState()"
+                    >
+                        Start
+                    </button>
+                    <button 
+                        class="notification_list_item_stop_button" 
+                        v-if="notification.isRunning()"
+                        @click="notification.toggleState()"
+                    >
+                        Stop
+                    </button>
+                    <button class="notification_list_item_loop_button">Loop</button>
+                    <button class="notification_list_item_unloop_button">Un-Loop</button>
+                    {{notification.name}}: {{notification.current_time}}
+                </li>
 			</ul>
 		</div>
 		{% endraw %}

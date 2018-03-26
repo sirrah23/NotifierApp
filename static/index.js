@@ -1,3 +1,8 @@
+const State = {
+    RUNNING: 0,
+    STOPPED: 1
+}
+
 const app = new Vue({
 	el: "#app",
 	data: {
@@ -8,11 +13,21 @@ const app = new Vue({
 	methods: {
 		addNotification(){
 			if(!this.validUserNotifText) return;
-			this.notifications = this.notifications.concat({
+			this.notifications = this.notifications.concat({ //TODO: Make this into an actual object
 				name: this.notification_name, 
 				current_time: this.notification_time,
 				original_time: this.notification_time,
-				state: "running"
+				state: State.RUNNING,
+                looping: false,
+                isRunning: function(){return this.state === State.RUNNING},
+                isStopped: function(){return this.state === State.STOPPED},
+                toggleState: function(){
+                    if(this.state === State.RUNNING){
+                        this.state = State.STOPPED;
+                    } else{
+                        this.state = State.RUNNING;
+                    }
+                } 
 			});
 			this.clearUserNotifText();
 		},
@@ -24,9 +39,10 @@ const app = new Vue({
 			this.notification_time = "";
 		},
 		decrement_times(){
+            //TODO: Move this logic into notification object
 			this.notifications = this.notifications.map((notification) => {
 				let res;
-				if(notification.state === "running" && notification.current_time !== 0){
+				if(notification.isRunning() && notification.current_time !== 0){
 					res = Object.assign(
 						{},
 						notification,
@@ -43,19 +59,12 @@ const app = new Vue({
 		},
 		notify(){
 			for(let i = 0; i < this.notifications.length; i++){
-				if(this.notifications[i].current_time === 0 && this.notifications[i].state==="running"){
+				if(this.notifications[i].current_time === 0 && this.notifications[i].isRunning()){
 					notifier.notify("Notifier App", this.notifications[i].name);
-					this.notifications[i].state = this.toggleState(this.notifications[i].state);
+					this.notifications[i].toggleState();
 				}
 			}
 		},
-		toggleState(state){
-			if(state === "running"){
-				return "stopped";
-			} else {
-				return "running";
-			}
-		}
 	}
 });
 
