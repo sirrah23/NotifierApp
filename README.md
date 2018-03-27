@@ -1,3 +1,3 @@
 # NotifierApp
 
-An application that sends you notificaitons when you want them. 
+An application that sends you notifications when you want them. 
