@@ -11,7 +11,8 @@
 			<input type=text id="notification_time" placeholder="Notification Time (seconds)" v-model="notification_time"></br>
 			<button id="notification_add_button" @click="addNotification">Add a notification</button>
 			<ul id="notification_list" style="list-style: none;">
-                <li class="notification_list_item" v-for="notification in notifications">
+                <li class="notification_list_item" v-for="notification in notifications" style="margin:15px;">
+                    {{notification.name}}: {{notification.current_time}}</br>
                     <button
                        class="notification_list_item_start_button"
                         v-if="notification.isStopped()"
@@ -40,7 +41,6 @@
 										>
 											Un-Loop
 										</button>
-                    {{notification.name}}: {{notification.current_time}}
                 </li>
 			</ul>
 		</div>
