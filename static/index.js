@@ -18,21 +18,20 @@ const app = new Vue({
 			this.notification_name = "";
 			this.notification_time = "";
 		},
-		decrement_times(){
-		    this.notifications.map(notification => {notification.decrementTime()});
+		tick(){
+		    this.notifications.map(notification => {notification.tick()});
 		},
 		notify(){
 			for(let i = 0; i < this.notifications.length; i++){
 				if(this.notifications[i].justFinished()){
 					notifier.notify("Notifier App", this.notifications[i].name);
-					this.notifications[i].toggleState();
 				}
 			}
 		},
 	},
   mounted(){
     setInterval(() => {
-    	app.decrement_times();
+    	app.tick();
     	app.notify();
     }, 1000);
   }

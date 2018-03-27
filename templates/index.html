@@ -26,8 +26,20 @@
                     >
                         Stop
                     </button>
-                    <button class="notification_list_item_loop_button">Loop</button>
-                    <button class="notification_list_item_unloop_button">Un-Loop</button>
+                    <button
+											class="notification_list_item_loop_button"
+											v-if="!notification.isLooping()"
+                      @click="notification.enableLoop()"
+										>
+											Loop
+										</button>
+                    <button
+											class="notification_list_item_unloop_button"
+											v-if="notification.isLooping()"
+											@click="notification.disableLoop()"
+										>
+											Un-Loop
+										</button>
                     {{notification.name}}: {{notification.current_time}}
                 </li>
 			</ul>

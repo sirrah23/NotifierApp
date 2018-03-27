@@ -52,4 +52,29 @@ class NotificationTracker{
         this.restartTimer();
     }
 
+    isLooping(){
+        return this.looping;
+    }
+
+    enableLoop(){
+      this.looping = true;
+    }
+
+    disableLoop(){
+      this.looping = false;
+    }
+
+    tick(){
+      if(!this.isRunning())
+        return;
+      if(this.current_time > 0){
+        this.current_time--;
+        return;
+      }
+      if(this.isLooping()){
+        this.current_time = this.original_time;
+        return;
+      }
+      this.toggleState()
+    }
 }
