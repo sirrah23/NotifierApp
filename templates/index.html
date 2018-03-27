@@ -12,15 +12,15 @@
 			<button id="notification_add_button" @click="addNotification">Add a notification</button>
 			<ul id="notification_list" style="list-style: none;">
                 <li class="notification_list_item" v-for="notification in notifications">
-                    <button 
-                       class="notification_list_item_start_button" 
+                    <button
+                       class="notification_list_item_start_button"
                         v-if="notification.isStopped()"
-                        @click="notification.toggleState()"
+                        @click="notification.restartOrContinueTimer()"
                     >
                         Start
                     </button>
-                    <button 
-                        class="notification_list_item_stop_button" 
+                    <button
+                        class="notification_list_item_stop_button"
                         v-if="notification.isRunning()"
                         @click="notification.toggleState()"
                     >
